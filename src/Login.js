@@ -1,29 +1,47 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./Login.css";
+import { auth } from "./firebase";
 
 function Login() {
+    const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const signIn = e => {
         e.preventDefault();
 
-        // some fancy firebase login shittttt.......
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .then(auth => {
+                history.push('/')
+            })
+            .catch(error => alert(error.message))
     }
 
     const register = e => {
         e.preventDefault();
 
-        // some fancy firebase login shittttt.......
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then((auth) => {
+                // it successfully created a new user with email and password
+                console.log(auth);
+                if (auth) {
+                    history.push('/')
+                }
+            })
+            .catch(error => alert(error.message))
+
     }
 
     return (
-        <div className="login">
-            <Link to="/">
+        <div className='login'>
+            <Link to='/'>
                 <img
                     className="login__logo" 
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png" 
+                    alt=""
                 />
             </Link>
 
